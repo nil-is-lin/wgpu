@@ -24,7 +24,16 @@ impl State {
             .await
             .unwrap();
         let (device, queue) = adapter
-            .request_device(&wgpu::DeviceDescriptor::default())
+            .request_device(
+                &wgpu::DeviceDescriptor {
+                    label: None,
+                    required_features: wgpu::Features::empty(),
+                    required_limits: wgpu::Limits::downlevel_defaults()
+                        .using_resolution(adapter.limits()),
+                    memory_hints: wgpu::MemoryHints::default(),  // Add missing field
+                },
+                None,
+            )
             .await
             .unwrap();
 
